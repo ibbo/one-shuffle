@@ -23,18 +23,23 @@ var stage = new Konva.Stage({
     width: width,
     height: height,
 });
-// After the stage is created recompute the width based on the margins
-width = document.getElementById("container").offsetWidth;
-stage.width(width);
 
-// If the number of columns is too big to fit the width of the window
-// change the scale of the stage so it will fit
-var scale = width / cardExtent;
-if (cardExtent > width) {
+function resizeStage() {
+    // After the stage is created recompute the width based on the margins
+    width = document.getElementById("container").offsetWidth;
+    stage.width(width);
+
+    // If the number of columns is too big to fit the width of the window
+    // change the scale of the stage so it will fit
+    var scale = width / cardExtent;
     stage.scaleX(scale);
     stage.scaleY(scale);
     stage.batchDraw();
+    var newHeight = height*scale;
+    stage.height(newHeight);
 }
+resizeStage();
+window.addEventListener('resize', resizeStage);
 
 var layer = new Konva.Layer();
 
