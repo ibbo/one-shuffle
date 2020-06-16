@@ -11,6 +11,7 @@ var delta = 5;
 var gap = depth * delta + 10;
 var cardWidth = 50;
 var cardHeight = 70;
+var maxScale = 2;
 
 var width = window.innerWidth;
 var numRows = Math.ceil(numCards / numColumns / depth);
@@ -32,6 +33,9 @@ function resizeStage() {
     // If the number of columns is too big to fit the width of the window
     // change the scale of the stage so it will fit
     var scale = width / cardExtent;
+    if (scale > maxScale) {
+	scale = maxScale;
+    }
     stage.scaleX(scale);
     stage.scaleY(scale);
     stage.batchDraw();
