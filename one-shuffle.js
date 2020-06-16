@@ -13,8 +13,8 @@ var cardWidth = 50;
 var cardHeight = 70;
 
 var width = window.innerWidth;
-var numRows = numCards / numColumns / depth;
-var height = numRows*(cardHeight + gap) + depth*delta + 2*yMargin;
+var numRows = Math.ceil(numCards / numColumns / depth);
+var height = numRows*(cardHeight + gap) - gap + depth*delta + 2*yMargin;
 
 var stage = new Konva.Stage({
     container: 'container',
