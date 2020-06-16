@@ -1,16 +1,6 @@
 window.onload = showCards;
 
 function showCards() {
-var width = window.innerWidth;
-var height = window.innerHeight;
-
-var stage = new Konva.Stage({
-    container: 'container',
-    width: width,
-    height: height,
-});
-
-var layer = new Konva.Layer();
 
 var numCards = document.getElementById("numCards").value;
 var numColumns = document.getElementById("numColumns").value;
@@ -21,6 +11,18 @@ var delta = 5;
 var gap = depth * delta + 10;
 var cardWidth = 50;
 var cardHeight = 70;
+
+var width = window.innerWidth;
+var numRows = numCards / numColumns / depth;
+var height = numRows*(cardHeight + gap) + depth*delta + 2*yMargin;
+
+var stage = new Konva.Stage({
+    container: 'container',
+    width: width,
+    height: height,
+});
+
+var layer = new Konva.Layer();
 
 var i;
 var cards = [];
