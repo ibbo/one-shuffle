@@ -47,9 +47,8 @@ var previousRect;
 var previousX;
 
 for (i=0; i < numCards-1; i++) {
-    previousRect = rect.clone();
-    previousX = previousRect.x();
-    previousY = previousRect.y();
+    previousX = rect.x();
+    previousY = rect.y();
 
     depthCounter += 1;
     if (depthCounter == depth) {
@@ -76,7 +75,7 @@ for (i=0; i < numCards-1; i++) {
         shadowBlur: 10,
         cornerRadius: 10,
     });
-
+    rect.on('tap', nextCard);
     layer.add(rect);
     cards.push(rect);
 
@@ -86,7 +85,10 @@ stage.add(layer);
 
 var randomCard = rect;
 var selectedCard = 0;
-stage.on('click', function () {
+stage.on('click', nextCard);
+
+function nextCard() {
+
     if (cards.length > 0) {
         selectedCard = Math.floor(Math.random() * cards.length);
         randomCard = cards[selectedCard];
@@ -97,5 +99,5 @@ stage.on('click', function () {
         layer.draw();
     }
     randomCard.hide();
-});
+}
 }
