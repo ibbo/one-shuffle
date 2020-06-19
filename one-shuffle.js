@@ -1,10 +1,27 @@
-window.onload = showCards;
+window.onload = init;
+
+function init() {
+if (localStorage.numCards) {
+    document.getElementById("numCards").value = localStorage.numCards;
+}
+if (localStorage.numColumns) {
+    document.getElementById("numColumns").value = localStorage.numColumns;
+}
+if (localStorage.depth) {
+    document.getElementById("depth").value = localStorage.depth;
+}
+
+showCards();
+}
 
 function showCards() {
 
 var numCards = document.getElementById("numCards").value;
+localStorage.numCards = numCards;
 var numColumns = document.getElementById("numColumns").value;
+localStorage.numColumns = numColumns;
 var depth = document.getElementById("depth").value;
+localStorage.depth = depth;
 var xMargin = 20;
 var yMargin = 40;
 var delta = 5;
