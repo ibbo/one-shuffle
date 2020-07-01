@@ -14,6 +14,26 @@ if (localStorage.depth) {
 showCards();
 }
 
+
+class Pile {
+    constructor(x, y) {
+        this.cards = [];
+        this.x = x;
+        this.y = y;
+    }
+
+    addCard(card) {
+        this.cards.push(card);
+    }
+}
+
+class Card {
+    constructor(rect, pile) {
+        this.rect = rect;
+        this.pile = pile;
+    }
+}
+
 function showCards() {
 
 var numCards = document.getElementById("numCards").value;
@@ -66,6 +86,7 @@ var layer = new Konva.Layer();
 
 var i;
 var cards = [];
+var piles = [];
 var columnCounter = 0;
 var rowCounter = 0;
 var depthCounter = 0;
@@ -81,7 +102,9 @@ var rect = new Konva.Rect({
 });
 
 layer.add(rect);
-cards.push(rect);
+var thisPile = new Pile(xMargin, yMargin);
+piles.push(thisPile);
+cards.push(new Card(rect, thisPile));
 
 var previousRect;
 var previousX;
@@ -101,6 +124,8 @@ for (i=0; i < numCards-1; i++) {
             dx = xMargin;
         }
         dy = yMargin + rowCounter * (cardHeight+gap);
+        thisPile = new Pile(dx, dy);
+        piles.push(thisPile);
     } else {
         dx = previousX + delta;
         dy = previousY + delta;
@@ -117,11 +142,13 @@ for (i=0; i < numCards-1; i++) {
     });
     rect.on('tap', nextCard);
     layer.add(rect);
-    cards.push(rect);
+    cards.push(new Card(rect, thisPile));
 
 }
 
 stage.add(layer);
+
+console.log(piles);
 
 var randomCard = rect;
 var selectedCard = 0;
@@ -132,12 +159,12 @@ function nextCard() {
     if (cards.length > 0) {
         selectedCard = Math.floor(Math.random() * cards.length);
         randomCard = cards[selectedCard];
-        randomCard.fill('red');
+        randomCard.rect.fill('red');
         layer.draw();
         cards.splice(selectedCard, 1);
     } else {
         layer.draw();
     }
-    randomCard.hide();
+    randomCard.rect.hide();
 }
 }
