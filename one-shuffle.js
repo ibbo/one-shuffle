@@ -16,14 +16,27 @@ showCards();
 
 
 class Pile {
-    constructor(x, y) {
+    constructor(x, y, cardOffset) {
         this.cards = [];
         this.x = x;
         this.y = y;
+        this.cardOffset = cardOffset;
     }
 
     addCard(card) {
         this.cards.push(card);
+    }
+
+    redraw() {
+        var x = this.x;
+        var y = this.y;
+        this.cards.forEach((item, index) => {
+            if (item.rect.visible()) {
+                item.rect.position({x:x, y:y});
+                x += this.cardOffset;
+                y += this.cardOffset;
+            }
+        });
     }
 }
 
@@ -102,9 +115,11 @@ var rect = new Konva.Rect({
 });
 
 layer.add(rect);
-var thisPile = new Pile(xMargin, yMargin);
+var thisPile = new Pile(xMargin, yMargin, delta);
 piles.push(thisPile);
-cards.push(new Card(rect, thisPile));
+var card = new Card(rect, thisPile);
+cards.push(card);
+thisPile.addCard(card);
 
 var previousRect;
 var previousX;
@@ -124,7 +139,7 @@ for (i=0; i < numCards-1; i++) {
             dx = xMargin;
         }
         dy = yMargin + rowCounter * (cardHeight+gap);
-        thisPile = new Pile(dx, dy);
+        thisPile = new Pile(dx, dy, delta);
         piles.push(thisPile);
     } else {
         dx = previousX + delta;
@@ -142,13 +157,12 @@ for (i=0; i < numCards-1; i++) {
     });
     rect.on('tap', nextCard);
     layer.add(rect);
-    cards.push(new Card(rect, thisPile));
-
+    var thisCard = new Card(rect, thisPile);
+    cards.push(thisCard);
+    thisPile.addCard(thisCard);
 }
 
 stage.add(layer);
-
-console.log(piles);
 
 var randomCard = rect;
 var selectedCard = 0;
@@ -166,5 +180,6 @@ function nextCard() {
         layer.draw();
     }
     randomCard.rect.hide();
+    randomCard.pile.redraw();
 }
 }
