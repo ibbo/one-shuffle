@@ -1,6 +1,9 @@
 window.onload = init;
 
 function init() {
+var autoVal = document.getElementById("auto");
+var autoDelay = document.getElementById("autoDelay");
+var delayValue = document.getElementById("delayValue");
 if (localStorage.numCards) {
     document.getElementById("numCards").value = localStorage.numCards;
 }
@@ -10,6 +13,23 @@ if (localStorage.numColumns) {
 if (localStorage.depth) {
     document.getElementById("depth").value = localStorage.depth;
 }
+if (localStorage.autoVal) {
+    autoVal.checked = localStorage.autoVal;
+}
+if (localStorage.autoDelay) {
+    autoDelay.value = localStorage.autoDelay;
+}
+
+delayValue.innerHTML = autoDelay.value;
+autoDelay.oninput = function() {
+    delayValue.innerHTML = this.value;
+    localStorage.autoDelay = this.value;
+}
+
+autoVal.oninput = function() {
+    localStorage.autoVal = this.checked;
+}
+
 
 showCards();
 }
@@ -127,8 +147,33 @@ var randomCard = rect;
 var selectedCard = 0;
 stage.on('click', nextCard);
 
-function nextCard() {
+var autoVal = document.getElementById("auto");
+var autoDelay = document.getElementById("autoDelay");
+var delayValue = document.getElementById("delayValue");
+var interval;
+if (autoVal.checked) {
+    interval = setInterval(function() { nextCard(); }, autoDelay.value*1000);
+}
+autoVal.oninput = function() {
+    if (this.checked) {
+        clearInterval(interval);
+        interval = setInterval(function() { nextCard(); }, autoDelay.value*1000);
+    } else {
+        clearInterval(interval);
+    }
+    localStorage.autoVal = this.checked;
+}
+autoDelay.oninput = function() {
+    delayValue.innerHTML = this.value;
+    localStorage.autoDelay = this.value;
+    if (autoVal.checked) {
+        clearInterval(interval);
+        interval = setInterval(function() { nextCard(); }, this.value*1000);
+    }
+}
 
+
+function nextCard() {
     if (cards.length > 0) {
         selectedCard = Math.floor(Math.random() * cards.length);
         randomCard = cards[selectedCard];
