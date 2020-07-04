@@ -14,22 +14,14 @@ if (localStorage.depth) {
     document.getElementById("depth").value = localStorage.depth;
 }
 if (localStorage.autoVal) {
-    autoVal.checked = localStorage.autoVal;
+    autoVal.checked = localStorage.autoVal == 'true';
+    console.log("Setting autoVal.checked to: " + localStorage.autoVal);
 }
 if (localStorage.autoDelay) {
     autoDelay.value = localStorage.autoDelay;
 }
 
 delayValue.innerHTML = autoDelay.value;
-autoDelay.oninput = function() {
-    delayValue.innerHTML = this.value;
-    localStorage.autoDelay = this.value;
-}
-
-autoVal.oninput = function() {
-    localStorage.autoVal = this.checked;
-}
-
 
 showCards();
 }
@@ -154,7 +146,7 @@ var interval;
 if (autoVal.checked) {
     interval = setInterval(function() { nextCard(); }, autoDelay.value*1000);
 }
-autoVal.oninput = function() {
+autoVal.onchange = function() {
     if (this.checked) {
         clearInterval(interval);
         interval = setInterval(function() { nextCard(); }, autoDelay.value*1000);
