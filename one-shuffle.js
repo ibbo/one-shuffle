@@ -1,4 +1,6 @@
 window.onload = init;
+// store a reference to the resize event listener so it can be removed
+var currentResizeListener = null;
 
 function init() {
 if (localStorage.numCards) {
@@ -49,6 +51,16 @@ class Card {
 
 function showCards() {
 
+    var container = document.getElementById("container");
+    // clear any previous stage contents
+    container.innerHTML = '';
+
+    // remove old resize listener if we added one previously
+    if (window.currentResizeListener) {
+        window.removeEventListener('resize', window.currentResizeListener);
+        window.currentResizeListener = null;
+    }
+
 var numCards = document.getElementById("numCards").value;
 localStorage.numCards = numCards;
 var numColumns = document.getElementById("numColumns").value;
@@ -94,6 +106,8 @@ function resizeStage() {
 }
 resizeStage();
 window.addEventListener('resize', resizeStage);
+// store listener for cleanup on the next reset
+window.currentResizeListener = resizeStage;
 
 var layer = new Konva.Layer();
 
@@ -123,6 +137,9 @@ thisPile.addCard(card);
 
 var previousRect;
 var previousX;
+var previousY;
+var dx;
+var dy;
 
 for (i=0; i < numCards-1; i++) {
     previousX = rect.x();
