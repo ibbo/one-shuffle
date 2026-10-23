@@ -164,22 +164,26 @@ for (i=0; i < numCards-1; i++) {
 
 stage.add(layer);
 
-var randomCard = rect;
+var randomCard = null;
 var selectedCard = 0;
 stage.on('click', nextCard);
 
 function nextCard() {
 
+    // Remove the previously highlighted card now that it has been picked up.
+    // Hiding it only on the next click keeps it visible through any redraw,
+    // such as the one resizeStage does when the window changes size.
+    if (randomCard) {
+        randomCard.rect.hide();
+        randomCard.pile.redraw();
+        randomCard = null;
+    }
     if (cards.length > 0) {
         selectedCard = Math.floor(Math.random() * cards.length);
         randomCard = cards[selectedCard];
         randomCard.rect.fill('red');
-        layer.draw();
         cards.splice(selectedCard, 1);
-    } else {
-        layer.draw();
     }
-    randomCard.rect.hide();
-    randomCard.pile.redraw();
+    layer.draw();
 }
 }
